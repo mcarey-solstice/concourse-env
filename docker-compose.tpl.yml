@@ -1,0 +1,32 @@
+###
+#
+##
+
+version: '3'
+
+services:
+  concourse-web:
+    environment:
+      - (( append ))
+      - CONCOURSE_NO_REALLY_I_DONT_WANT_ANY_AUTH=true
+  concourse-worker:
+    links:
+      - (( append ))
+      - vault
+    # TODO - Fixes a bug with configuration in concourse-docker
+    environment:
+      - (( replace ))
+      - CONCOURSE_TSA_HOST=concourse-web
+      - CONCOURSE_GARDEN_NETWORK
+  vault:
+    image: vault
+    command: "vault server -dev"
+    volumes:
+      - "./data/config:/vault/config"
+      - "./data/logs/vault:/vault/logs"
+    environment:
+      - VAULT_DEV_LISTEN_ADDRESS=0.0.0.0:8200
+    ports:
+      - "8200:8200"
+
+# vault
