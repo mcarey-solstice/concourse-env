@@ -22,8 +22,9 @@ services:
     image: vault
     command: "vault server -dev"
     volumes:
-      - "./data/config:/vault/config"
+      - "./config:/vault/config"
       - "./data/logs/vault:/vault/logs"
+      - "./data/vault:/vault/file"
     environment:
       - VAULT_DEV_ROOT_TOKEN_ID=letmein
       - VAULT_DEV_LISTEN_ADDRESS=0.0.0.0:8200
